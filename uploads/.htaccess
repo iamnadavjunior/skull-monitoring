@@ -1,0 +1,18 @@
+# Prevent PHP execution in uploads directory
+php_flag engine off
+
+# Only allow specific safe file types
+<FilesMatch "\.(?i:jpe?g|png|webp|pdf)$">
+    Require all granted
+</FilesMatch>
+
+# Block everything else
+<FilesMatch "\.(?i:php|phtml|php[0-9]|pht|shtml|cgi|pl|py|sh|bash|exe|bat|cmd)$">
+    Require all denied
+</FilesMatch>
+
+# No directory listing
+Options -Indexes
+
+# Disable script execution
+AddHandler default-handler .php .phtml .php3 .php4 .php5 .php7 .phps .pht .shtml
