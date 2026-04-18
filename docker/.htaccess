@@ -1,0 +1,23 @@
+RewriteEngine On
+
+# Pass Authorization header to PHP
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+
+# API routes — forward to PHP router
+RewriteRule ^api/(.*)$ api/index.php?route=$1 [QSA,L]
+
+# Serve uploaded files directly
+RewriteRule ^uploads/ - [L]
+
+# Already-rewritten to an actual file on disk — stop here
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Root directory — serve public/index.html
+RewriteRule ^$ public/index.html [L]
+
+# Static assets — rewrite to public/ directory
+RewriteRule ^assets/(.+)$ public/assets/$1 [L]
+
+# SPA fallback — serve public/index.html for all other routes
+RewriteRule !^public/ public/index.html [L]
